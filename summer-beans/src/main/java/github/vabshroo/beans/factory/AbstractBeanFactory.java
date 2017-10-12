@@ -6,6 +6,7 @@ import github.vabshroo.beans.exception.MultiBeansFoundException;
 import github.vabshroo.beans.exception.NoSuchBeanException;
 import github.vabshroo.core.util.CollectionUtil;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -19,13 +20,13 @@ import java.util.*;
 public abstract class AbstractBeanFactory extends AbstractBeanProcessor implements BeanFactory {
 
     /** All beans map,keyed by bean name */
-    private final Map<String,Bean> beanNamesMap = new HashMap<>();
+    protected final Map<String,Bean> beanNamesMap = new HashMap<>();
 
     /** All beans map,keyed by bean type */
-    private final Map<Class<?>,Set<String>> beanTypesMap = new HashMap<>();
+    protected final Map<Class<?>,Set<String>> beanTypesMap = new HashMap<>();
 
     public Object getBean(String beanName) throws Exception {
-        if(!beanTypesMap.containsKey(beanName)){
+        if(!beanNamesMap.containsKey(beanName)){
             throw new NoSuchBeanException(beanName);
         }
         return createBean(beanNamesMap.get(beanName));
@@ -52,6 +53,10 @@ public abstract class AbstractBeanFactory extends AbstractBeanProcessor implemen
     }
 
     public boolean containsBean(String beanName) {
-        return beanTypesMap.containsKey(beanName);
+        return beanNamesMap.containsKey(beanName);
     }
+
+    protected abstract boolean refresh();
+    public abstract boolean registerBean(Bean bean) throws Exception;
+    public abstract boolean removeBean(Bean bean) throws Exception;
 }

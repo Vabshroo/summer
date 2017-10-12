@@ -59,7 +59,7 @@ public abstract class AbstractBeanProcessor implements BeanProcessor {
                 field.setAccessible(true);
                 Object value = propertyValue.getValue();
                 if(value instanceof Bean){
-                    value = createBean(bean);
+                    value = createBean((Bean) value);
                 }
                 field.set(o,value);
             }
